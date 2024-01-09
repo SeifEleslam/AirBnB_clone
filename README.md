@@ -1,2 +1,3 @@
 # AirBnB_clone
-Cloning AirBnB website using  python stack
+
+Cloning AirBnB website using python stack
