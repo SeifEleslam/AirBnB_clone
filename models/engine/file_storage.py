@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Storage Class"""
+"""File Storage Model"""
 
 import json
 from os import path
@@ -15,9 +15,22 @@ class FileStorage():
         """Get all stored objects"""
         return self.__objects
 
+    def all_cls(self, cls: str):
+        """Get all instances of a specific class from the store"""
+        result = dict()
+        for key in self.__objects:
+            if key.split('.')[0] == cls:
+                result[key] = self.__objects[key]
+        return result
+
     def new(self, obj):
         """Add new obj to storage"""
-        self.__objects[obj['__class__'] + '.' + obj['id']] = obj
+        self.__objects[f"{obj['__class__']}.{obj['id']}"] = obj
+
+    def delete(self, key):
+        """Delete object by its key (Class.ID)"""
+        if key in self.__objects:
+            del self.__objects[key]
 
     def save(self):
         """Save current state of the object list into a file"""

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Base Model Class"""
+"""Base Model"""
 import uuid
 from datetime import datetime
 from models import storage
@@ -36,6 +36,12 @@ class BaseModel():
     def save(self) -> None:
         """Update the updated_at time with the current time"""
         self.updated_at = datetime.now()
+        storage.new(self.to_dict())
+        storage.save()
+
+    def delete(self):
+        """Remove instance from storage"""
+        storage.delete(f"{self.__class__.__name__}.{self.id}")
         storage.save()
 
     def to_dict(self):
