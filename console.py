@@ -2,6 +2,8 @@
 """Base Model Class Test"""
 
 from cmd import Cmd
+from re import compile, search
+
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -10,7 +12,6 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
-
 from models import storage
 
 
@@ -18,9 +19,11 @@ class HBNBCommand(Cmd):
     """HBNB Command Shell"""
 
     prompt = "(hbnb) "
+    all_pattern = compile(r"(.*?).all\(\)$")
+    count_pattern = compile(r"(.*?).count\(\)$")
 
     @staticmethod
-    def cmd_options(line: str, num: int) -> set[str]:
+    def cmd_options(line: str, num: int) -> list[str]:
         """Return the options for a command line."""
         options = [item for item in line.split(" ") if item]
         options = [options[i] if i < len(
@@ -67,6 +70,44 @@ class HBNBCommand(Cmd):
         else:
             return True
 
+    def update(self, class_name: str, id: str, attr: str, value: str):
+        args = [{"val": attr, "msg": "** attribute name missing **"},
+                {"val": value, "msg": "** value missing **"}]
+        if self.check(class_name, 2, id) and self.check_args(*args):
+            obj = storage.all()[f"{class_name}.{id}"]
+            instance = globals()[class_name](**obj)
+            setattr(instance, attr, type(attr)(value.strip('"')))
+            instance.save()
+
+    def all(self, class_name):
+        if not class_name:
+            print(storage.all())
+        elif self.check(class_name):
+            print(storage.all_cls(class_name))
+
+    def count(self, class_name):
+        if not class_name:
+            print(len(storage.all()))
+        elif self.check(class_name):
+            print(len(storage.all_cls(class_name)))
+
+    def destroy(self, class_name, id):
+        if self.check(class_name, 1, id):
+            storage.delete(f"{class_name}.{id}")
+            storage.save()
+
+    def show(self, class_name, id):
+        if self.check(class_name, 1, id):
+            obj = storage.all()[f"{class_name}.{id}"]
+            instance = globals()[class_name](**obj)
+            print(instance)
+
+    def create(self, class_name):
+        if self.check(class_name):
+            instance = globals()[class_name]()
+            instance.save()
+            print(instance.id)
+
     def emptyline(self) -> None:
         """Handles empty lines by doing nothing\n"""
 
@@ -80,45 +121,32 @@ class HBNBCommand(Cmd):
 
     def do_create(self, line: str) -> None:
         """Create command"""
-        (class_name, ) = self.cmd_options(line, 1)
-        if self.check(class_name):
-            instance = globals()[class_name]()
-            instance.save()
-            print(instance.id)
+        self.create(*self.cmd_options(line, 1))
 
     def do_show(self, line: str) -> None:
         """Show command"""
-        (class_name, id,) = self.cmd_options(line, 2)
-        if self.check(class_name, 1, id):
-            obj = storage.all()[f"{class_name}.{id}"]
-            instance = globals()[class_name](**obj)
-            print(instance)
+        self.show(*self.cmd_options(line, 2))
 
     def do_destroy(self, line: str) -> None:
         """Destroy command"""
-        (class_name, id,) = self.cmd_options(line, 2)
-        if self.check(class_name, 1, id):
-            storage.delete(f"{class_name}.{id}")
-            storage.save()
+        self.destroy(*self.cmd_options(line, 2))
 
     def do_all(self, line: str) -> None:
         """List all instances of a class"""
-        (class_name,) = self.cmd_options(line, 1)
-        if not class_name:
-            print(storage.all())
-        elif self.check(class_name):
-            print(storage.all_cls(class_name))
+        self.all(*self.cmd_options(line, 1))
 
     def do_update(self, line: str) -> None:
         """Update an attribute value for an object."""
-        (class_name, id, attr, value) = self.cmd_options(line, 4)
-        args = [{"val": attr, "msg": "** attribute name missing **"},
-                {"val": value, "msg": "** value missing **"}]
-        if self.check(class_name, 2, id) and self.check_args(*args):
-            obj = storage.all()[f"{class_name}.{id}"]
-            instance = globals()[class_name](**obj)
-            setattr(instance, attr, type(attr)(value.strip('"')))
-            instance.save()
+        self.update(*self.cmd_options(line, 4))
+
+    def default(self, line: str) -> None:
+        """Default handler when no specific handler is found"""
+        if (search(self.all_pattern, line)):
+            self.all(*self.all_pattern.findall(line))
+        if (search(self.count_pattern, line)):
+            self.count(*self.count_pattern.findall(line))
+        else:
+            self.stdout.write('*** Unknown syntax: %s\n' % line)
 
 
 if __name__ == '__main__':
