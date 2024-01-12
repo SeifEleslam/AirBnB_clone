@@ -9,7 +9,3 @@ class City(BaseModel):
 
     name: str = ""
     state_id: str = ""
-
-    def __init__(self, **kwargs):
-        """Initialize a new City instance with given values."""
-        super().__init__(**kwargs)
