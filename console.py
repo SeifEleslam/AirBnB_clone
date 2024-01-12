@@ -3,7 +3,7 @@
 
 from cmd import Cmd
 from re import compile, search
-from json import loads
+from ast import literal_eval
 
 from models.base_model import BaseModel
 from models.user import User
@@ -20,13 +20,15 @@ class HBNBCommand(Cmd):
     """HBNB Command Shell"""
 
     prompt = "(hbnb) "
-    all_pattern = compile(r"([\w-]*?).all\(\)$")
-    count_pattern = compile(r"([\w-]*?).count\(\)$")
-    show_pattern = compile(r"([\w-]*?).show\(([\w-]*?)\)$")
-    destroy_pattern = compile(r"([\w-]*?).destroy\(([\w-]*?)\)$")
-    update_pattern = compile(
-        r"([\w-]*?).update\(([\w-]*?) *, *([\w-]*?) *, *([\"\'\w-]*?)\)$")
-    update_obj_pattern = compile(r"([\w-]*?).update\(([\w-]*?) *, *(.*?)\)$")
+
+    __all_re = compile(r"(.*?).all\( *\)$")
+    __count_re = compile(r"([\w-]*?).count\( *\)$")
+    __show_re = compile(r"([\w-]*?).show\( *([\w-]*?) *\)$")
+    __destroy_re = compile(r"([\w-]*?).destroy\( *([\w-]*?) *\)$")
+    __update_obj_re = compile(
+        r"([\w-]*?).update\( *([\w-]*?) *, *({.*?}) *\)$")
+    __update_re = compile(
+        r"([\w-]*?).update\( *([\w-]*?) *, *([\w-]*?) *, *([\"\'\w-]*?) *\)$")
 
     @staticmethod
     def cmd_options(line: str, num: int) -> list[str]:
@@ -92,7 +94,7 @@ class HBNBCommand(Cmd):
         if self.check(class_name, 2, id) and self.check_args(*args):
             obj = storage.all()[f"{class_name}.{id}"]
             instance = globals()[class_name](**obj)
-            dic = loads(dic)
+            dic = literal_eval(dic)
             for key in dic:
                 setattr(instance, key, type(getattr(instance, key))(dic[key]))
             instance.save()
@@ -164,18 +166,18 @@ class HBNBCommand(Cmd):
 
     def default(self, line: str) -> None:
         """Default handler when no specific handler is found"""
-        if (search(self.all_pattern, line)):
-            self.all(*self.all_pattern.findall(line))
-        elif (search(self.count_pattern, line)):
-            self.count(*self.count_pattern.findall(line))
-        elif (search(self.show_pattern, line)):
-            self.show(*self.show_pattern.findall(line)[0])
-        elif (search(self.destroy_pattern, line)):
-            self.destroy(*self.destroy_pattern.findall(line)[0])
-        elif (search(self.update_pattern, line)):
-            self.update(*self.update_pattern.findall(line)[0])
-        elif (search(self.update_obj_pattern, line)):
-            self.update_obj(*self.update_obj_pattern.findall(line)[0])
+        if (search(self.__all_re, line)):
+            self.all(*self.__all_re.findall(line))
+        elif (search(self.__count_re, line)):
+            self.count(*self.__count_re.findall(line))
+        elif (search(self.__show_re, line)):
+            self.show(*self.__show_re.findall(line)[0])
+        elif (search(self.__destroy_re, line)):
+            self.destroy(*self.__destroy_re.findall(line)[0])
+        elif (search(self.__update_re, line)):
+            self.update(*self.__update_re.findall(line)[0])
+        elif (search(self.__update_obj_re, line)):
+            self.update_obj(*self.__update_obj_re.findall(line)[0])
         else:
             self.stdout.write('*** Unknown syntax: %s\n' % line)
 
