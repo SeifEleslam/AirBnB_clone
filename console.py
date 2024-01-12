@@ -19,8 +19,12 @@ class HBNBCommand(Cmd):
     """HBNB Command Shell"""
 
     prompt = "(hbnb) "
-    all_pattern = compile(r"(.*?).all\(\)$")
-    count_pattern = compile(r"(.*?).count\(\)$")
+    all_pattern = compile(r"([\w-]*?).all\(\)$")
+    count_pattern = compile(r"([\w-]*?).count\(\)$")
+    show_pattern = compile(r"([\w-]*?).show\(([\w-]*?)\)$")
+    destroy_pattern = compile(r"([\w-]*?).destroy\(([\w-]*?)\)$")
+    update_pattern = compile(
+        r"([\w-]*?).update\(([\w-]*?) *, *([\w-]*?) *, *([\"\'\w-]*?)\)$")
 
     @staticmethod
     def cmd_options(line: str, num: int) -> list[str]:
@@ -71,6 +75,7 @@ class HBNBCommand(Cmd):
             return True
 
     def update(self, class_name: str, id: str, attr: str, value: str):
+        """Update Attribute Value"""
         args = [{"val": attr, "msg": "** attribute name missing **"},
                 {"val": value, "msg": "** value missing **"}]
         if self.check(class_name, 2, id) and self.check_args(*args):
@@ -80,29 +85,34 @@ class HBNBCommand(Cmd):
             instance.save()
 
     def all(self, class_name):
+        """Return All Instances of a Class"""
         if not class_name:
             print(storage.all())
         elif self.check(class_name):
             print(storage.all_cls(class_name))
 
     def count(self, class_name):
+        """Count Number of Instances of a Class"""
         if not class_name:
             print(len(storage.all()))
         elif self.check(class_name):
             print(len(storage.all_cls(class_name)))
 
     def destroy(self, class_name, id):
+        """Destroy an Object by its ID"""
         if self.check(class_name, 1, id):
             storage.delete(f"{class_name}.{id}")
             storage.save()
 
     def show(self, class_name, id):
+        """Show the Details of an Object"""
         if self.check(class_name, 1, id):
             obj = storage.all()[f"{class_name}.{id}"]
             instance = globals()[class_name](**obj)
             print(instance)
 
     def create(self, class_name):
+        """Create New Object from Class Name"""
         if self.check(class_name):
             instance = globals()[class_name]()
             instance.save()
@@ -143,8 +153,15 @@ class HBNBCommand(Cmd):
         """Default handler when no specific handler is found"""
         if (search(self.all_pattern, line)):
             self.all(*self.all_pattern.findall(line))
-        if (search(self.count_pattern, line)):
+        elif (search(self.count_pattern, line)):
             self.count(*self.count_pattern.findall(line))
+        elif (search(self.show_pattern, line)):
+            self.show(*self.show_pattern.findall(line)[0])
+        elif (search(self.destroy_pattern, line)):
+            self.destroy(*self.destroy_pattern.findall(line)[0])
+        elif (search(self.update_pattern, line)):
+            print(self.update_pattern.findall(line)[0])
+            self.update(*self.update_pattern.findall(line)[0])
         else:
             self.stdout.write('*** Unknown syntax: %s\n' % line)
 
