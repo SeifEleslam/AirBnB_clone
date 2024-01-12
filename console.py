@@ -3,6 +3,7 @@
 
 from cmd import Cmd
 from re import compile, search
+from json import loads
 
 from models.base_model import BaseModel
 from models.user import User
@@ -25,6 +26,7 @@ class HBNBCommand(Cmd):
     destroy_pattern = compile(r"([\w-]*?).destroy\(([\w-]*?)\)$")
     update_pattern = compile(
         r"([\w-]*?).update\(([\w-]*?) *, *([\w-]*?) *, *([\"\'\w-]*?)\)$")
+    update_obj_pattern = compile(r"([\w-]*?).update\(([\w-]*?) *, *(.*?)\)$")
 
     @staticmethod
     def cmd_options(line: str, num: int) -> list[str]:
@@ -81,7 +83,18 @@ class HBNBCommand(Cmd):
         if self.check(class_name, 2, id) and self.check_args(*args):
             obj = storage.all()[f"{class_name}.{id}"]
             instance = globals()[class_name](**obj)
-            setattr(instance, attr, type(attr)(value.strip('"')))
+            setattr(instance, attr, type(
+                getattr(instance, attr))(value.strip('"')))
+            instance.save()
+
+    def update_obj(self, class_name: str, id: str, dic: str):
+        args = [{"val": dic, "msg": "** update obj missing **"}]
+        if self.check(class_name, 2, id) and self.check_args(*args):
+            obj = storage.all()[f"{class_name}.{id}"]
+            instance = globals()[class_name](**obj)
+            dic = loads(dic)
+            for key in dic:
+                setattr(instance, key, type(getattr(instance, key))(dic[key]))
             instance.save()
 
     def all(self, class_name):
@@ -160,8 +173,9 @@ class HBNBCommand(Cmd):
         elif (search(self.destroy_pattern, line)):
             self.destroy(*self.destroy_pattern.findall(line)[0])
         elif (search(self.update_pattern, line)):
-            print(self.update_pattern.findall(line)[0])
             self.update(*self.update_pattern.findall(line)[0])
+        elif (search(self.update_obj_pattern, line)):
+            self.update_obj(*self.update_obj_pattern.findall(line)[0])
         else:
             self.stdout.write('*** Unknown syntax: %s\n' % line)
 
