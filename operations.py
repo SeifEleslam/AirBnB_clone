@@ -9,16 +9,17 @@
 # from ast import literal_eval
 
 
+def cmd_options(line: str, num: int) -> list[str]:
+    """Return the options for a command line."""
+    options = [item for item in line.split(" ") if item]
+    options = [options[i] if i < len(
+        options) else None for i in range(num)]
+    return options
+
+
 class Operations():
     """Class for handling operations on the data in the database."""
     # @staticmethod
-
-    def cmd_options(self, line: str, num: int) -> list[str]:
-        """Return the options for a command line."""
-        options = [item for item in line.split(" ") if item]
-        options = [options[i] if i < len(
-            options) else None for i in range(num)]
-        return options
 
     # def check_cls(cls: str) -> bool:
     #     """Check Class"""
