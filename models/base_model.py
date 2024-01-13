@@ -35,7 +35,7 @@ class BaseModel():
     def save(self) -> None:
         """Update the updated_at time with the current time"""
         self.updated_at = datetime.now()
-        storage.new(self)
+        # storage.new(self)
         storage.save()
 
     def delete(self):
