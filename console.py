@@ -135,6 +135,7 @@ class HBNBCommand(Cmd):
 
     def emptyline(self):
         """Handles empty lines by doing nothing"""
+        pass
 
     def do_EOF(self, line: str):
         """Handles EOF (Ctrl+D) to exit the shell"""
