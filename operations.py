@@ -12,12 +12,12 @@
 # from ast import literal_eval
 
 
-# def cmd_options(line: str, num: int) -> list[str]:
-#     """Return the options for a command line."""
-#     options = [item for item in line.split(" ") if item]
-#     options = [options[i] if i < len(
-#         options) else None for i in range(num)]
-#     return options
+def cmd_options(line: str, num: int) -> list[str]:
+    """Return the options for a command line."""
+    options = [item for item in line.split(" ") if item]
+    options = [options[i] if i < len(
+        options) else None for i in range(num)]
+    return options
 
 
 class Operations():
