@@ -26,7 +26,7 @@ class HBNBCommand(cmd.Cmd):
     __show_re = compile(r"([\w-]*?).show\( *([\w-]*?) *\)$")
     __destroy_re = compile(r"([\w-]*?).destroy\( *([\w-]*?) *\)$")
     __update_re = compile(
-        r"([\w-]*?).update\( *\"([\w-]*?)\" *, *\"([\w-]*?)\" *, *\"([\"\'\w-]*?)\" *\)$")
+        r"([\w-]*?).update\( *\"([\w-]*?)\" *, *\"([\w-]*?)\" *, *\"(.*?)\" *\)$")
     __update_obj_re = compile(
         r"([\w-]*?).update\( *\"([\w-]*?)\" *, *({.*?}) *\)$")
 
