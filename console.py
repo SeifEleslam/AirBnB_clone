@@ -134,14 +134,14 @@ class HBNBCommand(Cmd):
             print(instance.id)
 
     def emptyline(self):
-        """Handles empty lines by doing nothing\n"""
+        """Handles empty lines by doing nothing"""
 
     def do_EOF(self, line: str):
-        """Handles EOF (Ctrl+D) to exit the shell\n"""
+        """Handles EOF (Ctrl+D) to exit the shell"""
         return True
 
     def do_quit(self, line: str):
-        """Quit command to exit the program\n"""
+        """Quit command to exit the program"""
         return True
 
     def do_create(self, line: str):
