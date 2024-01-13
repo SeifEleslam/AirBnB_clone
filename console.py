@@ -19,119 +19,119 @@ from models import storage
 class HBNBCommand(cmd.Cmd):
     """HBNB Command Shell"""
 
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
 
-    __all_re = compile(r"(.*?).all\( *\)$")
-    __count_re = compile(r"([\w-]*?).count\( *\)$")
-    __show_re = compile(r"([\w-]*?).show\( *([\w-]*?) *\)$")
-    __destroy_re = compile(r"([\w-]*?).destroy\( *([\w-]*?) *\)$")
-    __update_re = compile(
-        r"([\w-]*?).update\( *([\w-]*?) *, *([\w-]*?) *, *([\"\'\w-]*?) *\)$")
-    __update_obj_re = compile(
-        r"([\w-]*?).update\( *([\w-]*?) *, *({.*?}) *\)$")
+    # __all_re = compile(r"(.*?).all\( *\)$")
+    # __count_re = compile(r"([\w-]*?).count\( *\)$")
+    # __show_re = compile(r"([\w-]*?).show\( *([\w-]*?) *\)$")
+    # __destroy_re = compile(r"([\w-]*?).destroy\( *([\w-]*?) *\)$")
+    # __update_re = compile(
+    #     r"([\w-]*?).update\( *([\w-]*?) *, *([\w-]*?) *, *([\"\'\w-]*?) *\)$")
+    # __update_obj_re = compile(
+    #     r"([\w-]*?).update\( *([\w-]*?) *, *({.*?}) *\)$")
 
-    @staticmethod
-    def cmd_options(line: str, num: int) -> list[str]:
-        """Return the options for a command line."""
-        options = [item for item in line.split(" ") if item]
-        options = [options[i] if i < len(
-            options) else None for i in range(num)]
-        return options
+    # @staticmethod
+    # def cmd_options(line: str, num: int) -> list[str]:
+    #     """Return the options for a command line."""
+    #     options = [item for item in line.split(" ") if item]
+    #     options = [options[i] if i < len(
+    #         options) else None for i in range(num)]
+    #     return options
 
-    @staticmethod
-    def check_cls(cls: str) -> bool:
-        """Check Class"""
-        try:
-            globals()[cls]
-            return True
-        except KeyError:
-            return False
+    # @staticmethod
+    # def check_cls(cls: str) -> bool:
+    #     """Check Class"""
+    #     try:
+    #         globals()[cls]
+    #         return True
+    #     except KeyError:
+    #         return False
 
-    @staticmethod
-    def check_id(cls: str, id: str) -> bool:
-        """Check ID"""
-        try:
-            test = storage.all()[cls+'.'+id]
-            return True if test else False
-        except KeyError:
-            return False
+    # @staticmethod
+    # def check_id(cls: str, id: str) -> bool:
+    #     """Check ID"""
+    #     try:
+    #         test = storage.all()[cls+'.'+id]
+    #         return True if test else False
+    #     except KeyError:
+    #         return False
 
-    @staticmethod
-    def check_args(*args):
-        """Check Args"""
-        for arg in args:
-            if not arg["val"]:
-                print(arg["msg"])
-                return False
-        return True
+    # @staticmethod
+    # def check_args(*args):
+    #     """Check Args"""
+    #     for arg in args:
+    #         if not arg["val"]:
+    #             print(arg["msg"])
+    #             return False
+    #     return True
 
-    def check(self, cls: str, lvl=0, id: str | None = None) -> bool | None:
-        """Command Check Handler"""
-        if not cls:
-            print("** class name missing **")
-        elif not self.check_cls(cls):
-            print("** class doesn't exist **")
-        elif lvl > 0 and not id:
-            print("** instance id missing **")
-        elif lvl > 0 and not self.check_id(cls, id):
-            print("** no instance found **")
-        else:
-            return True
+    # def check(self, cls: str, lvl=0, id: str | None = None) -> bool | None:
+    #     """Command Check Handler"""
+    #     if not cls:
+    #         print("** class name missing **")
+    #     elif not self.check_cls(cls):
+    #         print("** class doesn't exist **")
+    #     elif lvl > 0 and not id:
+    #         print("** instance id missing **")
+    #     elif lvl > 0 and not self.check_id(cls, id):
+    #         print("** no instance found **")
+    #     else:
+    #         return True
 
-    def update(self, class_name: str, id: str, attr: str, value: str):
-        """Update Attribute Value"""
-        args = [{"val": attr, "msg": "** attribute name missing **"},
-                {"val": value, "msg": "** value missing **"}]
-        if self.check(class_name, 2, id) and self.check_args(*args):
-            obj = storage.all()[f"{class_name}.{id}"]
-            instance = globals()[class_name](**obj)
-            setattr(instance, attr, type(
-                getattr(instance, attr))(value.strip('"')))
-            instance.save()
+    # def update(self, class_name: str, id: str, attr: str, value: str):
+    #     """Update Attribute Value"""
+    #     args = [{"val": attr, "msg": "** attribute name missing **"},
+    #             {"val": value, "msg": "** value missing **"}]
+    #     if self.check(class_name, 2, id) and self.check_args(*args):
+    #         obj = storage.all()[f"{class_name}.{id}"]
+    #         instance = globals()[class_name](**obj)
+    #         setattr(instance, attr, type(
+    #             getattr(instance, attr))(value.strip('"')))
+    #         instance.save()
 
-    def update_obj(self, class_name: str, id: str, dic: str):
-        args = [{"val": dic, "msg": "** update obj missing **"}]
-        if self.check(class_name, 2, id) and self.check_args(*args):
-            obj = storage.all()[f"{class_name}.{id}"]
-            instance = globals()[class_name](**obj)
-            dic = literal_eval(dic)
-            for key in dic:
-                setattr(instance, key, type(getattr(instance, key))(dic[key]))
-            instance.save()
+    # def update_obj(self, class_name: str, id: str, dic: str):
+    #     args = [{"val": dic, "msg": "** update obj missing **"}]
+    #     if self.check(class_name, 2, id) and self.check_args(*args):
+    #         obj = storage.all()[f"{class_name}.{id}"]
+    #         instance = globals()[class_name](**obj)
+    #         dic = literal_eval(dic)
+    #         for key in dic:
+    #             setattr(instance, key, type(getattr(instance, key))(dic[key]))
+    #         instance.save()
 
-    def all(self, class_name):
-        """Return All Instances of a Class"""
-        if not class_name:
-            print(storage.all())
-        elif self.check(class_name):
-            print(storage.all_cls(class_name))
+    # def all(self, class_name):
+    #     """Return All Instances of a Class"""
+    #     if not class_name:
+    #         print(storage.all())
+    #     elif self.check(class_name):
+    #         print(storage.all_cls(class_name))
 
-    def count(self, class_name):
-        """Count Number of Instances of a Class"""
-        if not class_name:
-            print(len(storage.all()))
-        elif self.check(class_name):
-            print(len(storage.all_cls(class_name)))
+    # def count(self, class_name):
+    #     """Count Number of Instances of a Class"""
+    #     if not class_name:
+    #         print(len(storage.all()))
+    #     elif self.check(class_name):
+    #         print(len(storage.all_cls(class_name)))
 
-    def destroy(self, class_name, id):
-        """Destroy an Object by its ID"""
-        if self.check(class_name, 1, id):
-            storage.delete(f"{class_name}.{id}")
-            storage.save()
+    # def destroy(self, class_name, id):
+    #     """Destroy an Object by its ID"""
+    #     if self.check(class_name, 1, id):
+    #         storage.delete(f"{class_name}.{id}")
+    #         storage.save()
 
-    def show(self, class_name, id):
-        """Show the Details of an Object"""
-        if self.check(class_name, 1, id):
-            obj = storage.all()[f"{class_name}.{id}"]
-            instance = globals()[class_name](**obj)
-            print(instance)
+    # def show(self, class_name, id):
+    #     """Show the Details of an Object"""
+    #     if self.check(class_name, 1, id):
+    #         obj = storage.all()[f"{class_name}.{id}"]
+    #         instance = globals()[class_name](**obj)
+    #         print(instance)
 
-    def create(self, class_name):
-        """Create New Object from Class Name"""
-        if self.check(class_name):
-            instance = globals()[class_name]()
-            instance.save()
-            print(instance.id)
+    # def create(self, class_name):
+    #     """Create New Object from Class Name"""
+    #     if self.check(class_name):
+    #         instance = globals()[class_name]()
+    #         instance.save()
+    #         print(instance.id)
 
     def emptyline(self) -> None:
         """Handles empty lines by doing nothing\n"""
