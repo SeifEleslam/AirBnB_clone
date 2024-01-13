@@ -47,7 +47,7 @@ class BaseModel():
 
     def to_dict(self):
         """Convert object values to dictionary"""
-        repr_dict = dict(self.__dict__)
+        repr_dict = (self.__dict__).copy()
         repr_dict["__class__"] = self.__class__.__name__
         repr_dict["created_at"] = repr_dict["created_at"].isoformat()
         repr_dict["updated_at"] = repr_dict["updated_at"].isoformat()
