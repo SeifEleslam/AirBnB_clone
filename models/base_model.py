@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Base Model"""
-import uuid
+
+from uuid import uuid4
 from datetime import datetime
 from models import storage
 
@@ -10,11 +11,11 @@ class BaseModel():
     This is the base model class from which all other classes inherit.
     It provides common methods
     """
-    id: str = None
-    created_at: datetime = None
-    updated_at: datetime = None
+    id: str
+    created_at: datetime
+    updated_at: datetime
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         if kwargs:
             for key in kwargs:
                 if key != "__class__":
@@ -25,7 +26,7 @@ class BaseModel():
             return
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
-        self.id = str(uuid.uuid4())
+        self.id = str(uuid4())
         storage.new(self)
 
     def __str__(self) -> str:
