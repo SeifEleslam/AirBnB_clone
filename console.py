@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""Base Model Class Test"""
+"""Console Interpreter"""
+
 import cmd
 # from re import compile, search
 # from ast import literal_eval
@@ -18,7 +19,7 @@ import cmd
 class HBNBCommand(cmd.Cmd):
     """HBNB Command Shell"""
 
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
 
     # __all_re = compile(r"(.*?).all\( *\)$")
     # __count_re = compile(r"([\w-]*?).count\( *\)$")
