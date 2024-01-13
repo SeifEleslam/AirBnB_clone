@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Base Model Class Test"""
 
-from cmd import Cmd
+import cmd
 from re import compile, search
 from ast import literal_eval
 
@@ -16,7 +16,7 @@ from models.review import Review
 from models import storage
 
 
-class HBNBCommand(Cmd):
+class HBNBCommand(cmd.Cmd):
     """HBNB Command Shell"""
 
     prompt = "(hbnb) "
