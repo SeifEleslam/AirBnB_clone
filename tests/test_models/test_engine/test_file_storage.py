@@ -26,7 +26,8 @@ class TestFileStorage(unittest.TestCase):
         storage = FileStorage()
         test = storage.all().copy()
         test['key'] = "value"
-        mock_open.return_value.__enter__.return_value.read.return_value = '{"key": "value"}'
+        mock_open.return_value.__enter__.\
+            return_value.read.return_value = '{"key": "value"}'
         storage.reload()
         self.assertEqual(storage.all(), {"key": "value"})
 

@@ -79,7 +79,8 @@ class Operations():
     #         instance = globals()[class_name](**obj)
     #         dic = literal_eval(dic)
     #         for key in dic:
-    #             setattr(instance, key, type(getattr(instance, key))(dic[key]))
+    #             setattr(instance, key, type(getattr(instance, key))
+    # (dic[key]))
     #         instance.save()
 
     # def all(class_name):
