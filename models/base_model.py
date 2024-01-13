@@ -15,7 +15,7 @@ class BaseModel():
     created_at: datetime
     updated_at: datetime
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Initialize BaseModel"""
         if kwargs:
             for key in kwargs:
