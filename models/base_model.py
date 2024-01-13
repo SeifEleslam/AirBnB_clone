@@ -10,9 +10,9 @@ class BaseModel():
     This is the base model class from which all other classes inherit.
     It provides common methods
     """
-    id = None
-    created_at = None
-    updated_at = None
+    id = ""
+    created_at = datetime()
+    updated_at = datetime()
 
     def __init__(self, *args, **kwargs) -> None:
         if kwargs:
@@ -41,7 +41,7 @@ class BaseModel():
     def delete(self):
         """Remove instance from storage"""
         storage.delete(f"{self.__class__.__name__}.{self.id}")
-        # storage.save()
+        storage.save()
 
     def to_dict(self):
         """Convert object values to dictionary"""
