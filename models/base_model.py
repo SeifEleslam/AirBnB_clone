@@ -26,7 +26,7 @@ class BaseModel():
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
         self.id = str(uuid.uuid4())
-        storage.new(self)
+        storage.new(self.to_dict())
 
     def __str__(self) -> str:
         """Return the string representation of class"""
