@@ -35,13 +35,13 @@ class BaseModel():
     def save(self) -> None:
         """Update the updated_at time with the current time"""
         self.updated_at = datetime.now()
-        # storage.new(self)
+        storage.new(self)
         storage.save()
 
     def delete(self):
         """Remove instance from storage"""
         storage.delete(f"{self.__class__.__name__}.{self.id}")
-        storage.save()
+        # storage.save()
 
     def to_dict(self):
         """Convert object values to dictionary"""
