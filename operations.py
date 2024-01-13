@@ -12,7 +12,7 @@
 # from ast import literal_eval
 
 
-def cmd_options(line: str, num: int) -> list[str]:
+def cmd_options(line: str, num: int):
     """Return the options for a command line."""
     options = [item for item in line.split(" ") if item]
     options = [options[i] if i < len(
