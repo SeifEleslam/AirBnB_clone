@@ -56,14 +56,14 @@ class HBNBCommand(Cmd):
         except KeyError:
             return False
 
-    # @staticmethod
-    # def check_args(*args):
-    #     """Check Args"""
-    #     for arg in args:
-    #         if not arg["val"]:
-    #             print(arg["msg"])
-    #             return False
-    #     return True
+    @staticmethod
+    def check_args(*args):
+        """Check Args"""
+        for arg in args:
+            if not arg["val"]:
+                print(arg["msg"])
+                return False
+        return True
 
     # def check(self, cls: str, lvl=0, id: str | None = None):
     #     """Command Check Handler"""
