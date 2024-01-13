@@ -10,9 +10,9 @@ class BaseModel():
     This is the base model class from which all other classes inherit.
     It provides common methods
     """
-    id = ""
-    created_at = datetime()
-    updated_at = datetime()
+    id: str
+    created_at: datetime
+    updated_at: datetime
 
     def __init__(self, *args, **kwargs) -> None:
         if kwargs:
