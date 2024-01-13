@@ -2,18 +2,18 @@
 """Base Model Class Test"""
 
 from cmd import Cmd
-from re import compile, search
-from ast import literal_eval
+# from re import compile, search
+# from ast import literal_eval
 
-from models.base_model import BaseModel
-from models.user import User
-from models.state import State
-from models.place import Place
-from models.city import City
-from models.amenity import Amenity
-from models.review import Review
+# from models.base_model import BaseModel
+# from models.user import User
+# from models.state import State
+# from models.place import Place
+# from models.city import City
+# from models.amenity import Amenity
+# from models.review import Review
 
-from models import storage
+# from models import storage
 
 
 class HBNBCommand(Cmd):
@@ -135,6 +135,7 @@ class HBNBCommand(Cmd):
 
     def emptyline(self):
         """Handles empty lines by doing nothing"""
+        pass
 
     def do_EOF(self, line: str):
         """Handles EOF (Ctrl+D) to exit the shell"""
