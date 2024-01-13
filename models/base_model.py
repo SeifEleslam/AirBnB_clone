@@ -39,10 +39,10 @@ class BaseModel():
         storage.new(self)
         storage.save()
 
-    def delete(self):
-        """Remove instance from storage"""
-        storage.delete(f"{self.__class__.__name__}.{self.id}")
-        storage.save()
+    # def delete(self):
+    #     """Remove instance from storage"""
+    #     storage.delete(f"{self.__class__.__name__}.{self.id}")
+    #     storage.save()
 
     def to_dict(self):
         """Convert object values to dictionary"""
