@@ -3,7 +3,7 @@
 
 import cmd
 from re import compile, search
-import operations
+import operations as ops
 # from models.operations import ops
 # from operations import *
 
@@ -12,7 +12,7 @@ class HBNBCommand(cmd.Cmd):
     """HBNB Command Shell"""
 
     prompt = "(hbnb) "
-    user = operations.Operations()
+    user = ops.Operations()
 
     __all_re = compile(r"(.*?).all\( *\)$")
     __count_re = compile(r"([\w-]*?).count\( *\)$")
@@ -36,7 +36,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line: str) -> None:
         """Create command"""
-        create(*cmd_options(line, 1))
+        create(*ops.cmd_options(line, 1))
 
     def do_show(self, line: str) -> None:
         """Show command"""
