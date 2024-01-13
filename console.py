@@ -38,14 +38,14 @@ class HBNBCommand(Cmd):
             options) else None for i in range(num)]
         return options
 
-    # @staticmethod
-    # def check_cls(cls: str):
-    #     """Check Class"""
-    #     try:
-    #         globals()[cls]
-    #         return True
-    #     except KeyError:
-    #         return False
+    @staticmethod
+    def check_cls(cls: str):
+        """Check Class"""
+        try:
+            globals()[cls]
+            return True
+        except KeyError:
+            return False
 
     # @staticmethod
     # def check_id(cls: str, id: str):
