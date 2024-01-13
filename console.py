@@ -3,7 +3,7 @@
 
 import cmd
 from re import compile, search
-from operations import create, all, count, destroy, show, update, update_obj, check, check_cls, cmd_options
+from operations import create
 # from operations import *
 
 
