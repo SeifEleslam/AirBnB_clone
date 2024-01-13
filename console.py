@@ -30,13 +30,13 @@ class HBNBCommand(cmd.Cmd):
     __update_obj_re = compile(
         r"([\w-]*?).update\( *([\w-]*?) *, *({.*?}) *\)$")
 
-    # @staticmethod
-    # def cmd_options(line: str, num: int) -> list[str]:
-    #     """Return the options for a command line."""
-    #     options = [item for item in line.split(" ") if item]
-    #     options = [options[i] if i < len(
-    #         options) else None for i in range(num)]
-    #     return options
+    @staticmethod
+    def cmd_options(line: str, num: int) -> list[str]:
+        """Return the options for a command line."""
+        options = [item for item in line.split(" ") if item]
+        options = [options[i] if i < len(
+            options) else None for i in range(num)]
+        return options
 
     # @staticmethod
     # def check_cls(cls: str) -> bool:
