@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+"""Ops Model"""
 # from models.review import Review
 # from models.amenity import Amenity
 # from models.city import City
