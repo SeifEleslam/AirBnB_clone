@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Base Model That represents all other classes"""
-import uuid
+from uuid import uuid4
 from datetime import datetime
 from models import storage
 
@@ -10,11 +10,12 @@ class BaseModel():
     This is the base model class from which all other classes inherit.
     It provides common methods
     """
-    id = None
-    created_at = None
-    updated_at = None
+    id: str
+    created_at: datetime
+    updated_at: datetime
 
     def __init__(self, *args, **kwargs) -> None:
+        """Initialize BaseModel"""
         if kwargs:
             for key in kwargs:
                 if key != "__class__":
@@ -25,7 +26,7 @@ class BaseModel():
             return
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
-        self.id = str(uuid.uuid4())
+        self.id = str(uuid4())
         storage.new(self)
 
     def __str__(self) -> str:
@@ -45,7 +46,7 @@ class BaseModel():
 
     def to_dict(self):
         """Convert object values to dictionary"""
-        repr_dict = dict(self.__dict__)
+        repr_dict = self.__dict__.copy()
         repr_dict["__class__"] = self.__class__.__name__
         repr_dict["created_at"] = repr_dict["created_at"].isoformat()
         repr_dict["updated_at"] = repr_dict["updated_at"].isoformat()
