@@ -16,6 +16,7 @@ class BaseModel():
     updated_at: datetime
 
     def __init__(self, **kwargs):
+        """Initialize BaseModel"""
         if kwargs:
             for key in kwargs:
                 if key != "__class__":
@@ -39,10 +40,10 @@ class BaseModel():
         storage.new(self)
         storage.save()
 
-    # def delete(self):
-    #     """Remove instance from storage"""
-    #     storage.delete(f"{self.__class__.__name__}.{self.id}")
-    #     storage.save()
+    def delete(self):
+        """Remove instance from storage"""
+        storage.delete(f"{self.__class__.__name__}.{self.id}")
+        storage.save()
 
     def to_dict(self):
         """Convert object values to dictionary"""
