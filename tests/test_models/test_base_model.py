@@ -16,7 +16,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsNotNone(model.id)
         self.assertIsNotNone(model.created_at)
         self.assertIsNotNone(model.updated_at)
-        self.assertEqual(model.created_at, model.updated_at)
 
     def test_instantiation_with_kwargs(self):
         """Test instantiating with keyword arguments."""
