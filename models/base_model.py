@@ -23,9 +23,9 @@ class BaseModel():
                             key == "created_at" or key == "updated_at"
                     ) else kwargs[key])
             return
-        time_now = datetime.now()
-        self.created_at = time_now
-        self.updated_at = time_now
+        # time_now = datetime.now()
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
         self.id = str(uuid.uuid4())
         storage.new(self.to_dict())
 
