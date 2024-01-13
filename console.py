@@ -47,14 +47,14 @@ class HBNBCommand(Cmd):
         except KeyError:
             return False
 
-    # @staticmethod
-    # def check_id(cls: str, id: str):
-    #     """Check ID"""
-    #     try:
-    #         test = storage.all()[cls+'.'+id]
-    #         return True if test else False
-    #     except KeyError:
-    #         return False
+    @staticmethod
+    def check_id(cls: str, id: str):
+        """Check ID"""
+        try:
+            test = storage.all()[cls+'.'+id]
+            return True if test else False
+        except KeyError:
+            return False
 
     # @staticmethod
     # def check_args(*args):
