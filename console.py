@@ -30,13 +30,13 @@ class HBNBCommand(cmd.Cmd):
     __update_obj_re = compile(
         r"([\w-]*?).update\( *([\w-]*?) *, *({.*?}) *\)$")
 
-    @staticmethod
-    def cmd_options(line: str, num: int) -> list[str]:
-        """Return the options for a command line."""
-        options = [item for item in line.split(" ") if item]
-        options = [options[i] if i < len(
-            options) else None for i in range(num)]
-        return options
+    # @staticmethod
+    # def cmd_options(line: str, num: int) -> list[str]:
+    #     """Return the options for a command line."""
+    #     options = [item for item in line.split(" ") if item]
+    #     options = [options[i] if i < len(
+    #         options) else None for i in range(num)]
+    #     return options
 
     # @staticmethod
     # def check_cls(cls: str) -> bool:
@@ -65,18 +65,18 @@ class HBNBCommand(cmd.Cmd):
     #             return False
     #     return True
 
-    # def check(self, cls: str, lvl=0, id: str | None = None) -> bool | None:
-    #     """Command Check Handler"""
-    #     if not cls:
-    #         print("** class name missing **")
-    #     elif not self.check_cls(cls):
-    #         print("** class doesn't exist **")
-    #     elif lvl > 0 and not id:
-    #         print("** instance id missing **")
-    #     elif lvl > 0 and not self.check_id(cls, id):
-    #         print("** no instance found **")
-    #     else:
-    #         return True
+    def check(self, cls: str, lvl=0, id: str | None = None) -> bool | None:
+        """Command Check Handler"""
+        if not cls:
+            print("** class name missing **")
+        elif not self.check_cls(cls):
+            print("** class doesn't exist **")
+        elif lvl > 0 and not id:
+            print("** instance id missing **")
+        elif lvl > 0 and not self.check_id(cls, id):
+            print("** no instance found **")
+        else:
+            return True
 
     # def update(self, class_name: str, id: str, attr: str, value: str):
     #     """Update Attribute Value"""
