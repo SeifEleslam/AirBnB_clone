@@ -18,7 +18,7 @@ import cmd
 class HBNBCommand(cmd.Cmd):
     """HBNB Command Shell"""
 
-    prompt = "(hbnb) "
+    prompt = "(hbnb)"
 
     # __all_re = compile(r"(.*?).all\( *\)$")
     # __count_re = compile(r"([\w-]*?).count\( *\)$")
