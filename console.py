@@ -3,7 +3,7 @@
 
 import cmd
 from re import compile, search
-from models.operations import Operations
+from models.user import User
 # from models.operations import ops
 # from operations import *
 
