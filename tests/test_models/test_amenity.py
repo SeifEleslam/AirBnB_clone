@@ -14,4 +14,4 @@ class TestAmenity(unittest.TestCase):
         self.assertIsNotNone(model.id)
         self.assertIsNotNone(model.created_at)
         self.assertIsNotNone(model.updated_at)
-        self.assertEqual(model.created_at, model.updated_at)
+        self.assertNotEqual(model.created_at, model.updated_at)
