@@ -3,8 +3,8 @@
 
 import unittest
 from unittest.mock import patch
-from pathlib import Path
 from models.engine.file_storage import FileStorage
+from models.base_model import BaseModel
 
 
 class TestFileStorage(unittest.TestCase):
@@ -33,16 +33,16 @@ class TestFileStorage(unittest.TestCase):
 
     def test_new(self):
         storage = FileStorage()
-        obj = {'__class__': 'MyClass', 'id': "123", 'name': 'Test'}
+        obj = BaseModel()
         test = storage.all().copy()
-        test['MyClass.123'] = obj
+        test[f'{obj.__class__.__name__}.{obj.id}'] = obj.to_dict()
         storage.new(obj)
         self.assertEqual(storage.all(), test)
 
     def test_save(self):
         storage = FileStorage()
         storage.new(
-            {'__class__': 'MyClass', 'id': "456", 'name': 'Another'})
+            BaseModel())
         with patch("builtins.open"):
             storage.save()
             open.assert_called_once_with("file.json", "w")

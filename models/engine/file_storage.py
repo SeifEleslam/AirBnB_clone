@@ -25,7 +25,7 @@ class FileStorage():
 
     def new(self, obj):
         """Add new obj to storage"""
-        self.__objects[f"{obj['__class__']}.{obj['id']}"] = obj
+        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj.to_dict()
 
     def delete(self, key):
         """Delete object by its key (Class.ID)"""

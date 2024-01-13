@@ -26,7 +26,7 @@ class BaseModel():
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
         self.id = str(uuid.uuid4())
-        storage.new(self.to_dict())
+        storage.new(self)
 
     def __str__(self) -> str:
         """Return the string representation of class"""
@@ -35,7 +35,7 @@ class BaseModel():
     def save(self) -> None:
         """Update the updated_at time with the current time"""
         self.updated_at = datetime.now()
-        storage.new(self.to_dict())
+        storage.new(self)
         storage.save()
 
     def delete(self):
