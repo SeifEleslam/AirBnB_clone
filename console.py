@@ -3,7 +3,7 @@
 
 import cmd
 from re import compile, search
-from models.user import User
+from models.operations import ops
 # from models.operations import ops
 # from operations import *
 
@@ -35,7 +35,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line: str) -> None:
         """Create command"""
-        create(*cmd_options(line, 1))
+        ops.create(*cmd_options(line, 1))
 
     def do_show(self, line: str) -> None:
         """Show command"""
