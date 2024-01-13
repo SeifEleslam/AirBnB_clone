@@ -38,45 +38,45 @@ class HBNBCommand(Cmd):
             options) else None for i in range(num)]
         return options
 
-    @staticmethod
-    def check_cls(cls: str):
-        """Check Class"""
-        try:
-            globals()[cls]
-            return True
-        except KeyError:
-            return False
+    # @staticmethod
+    # def check_cls(cls: str):
+    #     """Check Class"""
+    #     try:
+    #         globals()[cls]
+    #         return True
+    #     except KeyError:
+    #         return False
 
-    @staticmethod
-    def check_id(cls: str, id: str):
-        """Check ID"""
-        try:
-            test = storage.all()[cls+'.'+id]
-            return True if test else False
-        except KeyError:
-            return False
+    # @staticmethod
+    # def check_id(cls: str, id: str):
+    #     """Check ID"""
+    #     try:
+    #         test = storage.all()[cls+'.'+id]
+    #         return True if test else False
+    #     except KeyError:
+    #         return False
 
-    @staticmethod
-    def check_args(*args):
-        """Check Args"""
-        for arg in args:
-            if not arg["val"]:
-                print(arg["msg"])
-                return False
-        return True
+    # @staticmethod
+    # def check_args(*args):
+    #     """Check Args"""
+    #     for arg in args:
+    #         if not arg["val"]:
+    #             print(arg["msg"])
+    #             return False
+    #     return True
 
-    def check(self, cls: str, lvl=0, id: str | None = None):
-        """Command Check Handler"""
-        if not cls:
-            print("** class name missing **")
-        elif not self.check_cls(cls):
-            print("** class doesn't exist **")
-        elif lvl > 0 and not id:
-            print("** instance id missing **")
-        elif lvl > 0 and not self.check_id(cls, id):
-            print("** no instance found **")
-        else:
-            return True
+    # def check(self, cls: str, lvl=0, id: str | None = None):
+    #     """Command Check Handler"""
+    #     if not cls:
+    #         print("** class name missing **")
+    #     elif not self.check_cls(cls):
+    #         print("** class doesn't exist **")
+    #     elif lvl > 0 and not id:
+    #         print("** instance id missing **")
+    #     elif lvl > 0 and not self.check_id(cls, id):
+    #         print("** no instance found **")
+    #     else:
+    #         return True
 
     def update(self, class_name: str, id: str, attr: str, value: str):
         """Update Attribute Value"""
