@@ -138,6 +138,7 @@ class HBNBCommand(Cmd):
 
     def do_EOF(self, line: str):
         """Handles EOF (Ctrl+D) to exit the shell"""
+        print("")
         return True
 
     def do_quit(self, line: str):
