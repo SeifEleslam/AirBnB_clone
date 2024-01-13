@@ -3,6 +3,7 @@
 
 import cmd
 from re import compile, search
+from models import *
 # from models.operations import ops
 # from operations import *
 
