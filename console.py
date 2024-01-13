@@ -65,18 +65,18 @@ class HBNBCommand(Cmd):
                 return False
         return True
 
-    # def check(self, cls: str, lvl=0, id: str | None = None):
-    #     """Command Check Handler"""
-    #     if not cls:
-    #         print("** class name missing **")
-    #     elif not self.check_cls(cls):
-    #         print("** class doesn't exist **")
-    #     elif lvl > 0 and not id:
-    #         print("** instance id missing **")
-    #     elif lvl > 0 and not self.check_id(cls, id):
-    #         print("** no instance found **")
-    #     else:
-    #         return True
+    def check(self, cls: str, lvl=0, id: str = None):
+        """Command Check Handler"""
+        if not cls:
+            print("** class name missing **")
+        elif not self.check_cls(cls):
+            print("** class doesn't exist **")
+        elif lvl > 0 and not id:
+            print("** instance id missing **")
+        elif lvl > 0 and not self.check_id(cls, id):
+            print("** no instance found **")
+        else:
+            return True
 
     def update(self, class_name: str, id: str, attr: str, value: str):
         """Update Attribute Value"""
