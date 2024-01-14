@@ -8,14 +8,17 @@ from models.base_model import BaseModel
 
 
 class TestFileStorage(unittest.TestCase):
+    """Class to test the file storage class."""
 
     def setUp(self):
+        """Set up the test environment"""
         storage = FileStorage()
         test = storage.all()
         self.assertEqual(storage.all(), test)
 
     @patch('os.path.exists')
     def test_all_no_file(self, mock_path_exists):
+        """Test all method if no file exists."""
         storage = FileStorage()
         test = storage.all()
         mock_path_exists.return_value = False
@@ -25,6 +28,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(storage.all(), test)
 
     def test_all_with_file(self):
+        """Tests that the all method returns a list of objects in the file."""
         storage = FileStorage()
         model = BaseModel()
         model.save()
@@ -34,6 +38,7 @@ class TestFileStorage(unittest.TestCase):
             to_dict(), model.to_dict())
 
     def test_new(self):
+        """test new value in BaseModel"""
         storage = FileStorage()
         obj = BaseModel()
         test = storage.all().copy()
@@ -42,6 +47,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(storage.all(), test)
 
     def test_save(self):
+        """Test Saving process"""
         storage = FileStorage()
         storage.new(
             BaseModel())
