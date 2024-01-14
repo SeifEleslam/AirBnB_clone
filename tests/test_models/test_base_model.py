@@ -43,6 +43,14 @@ class TestBaseModel(unittest.TestCase):
             **storage.all()[model.__class__.__name__+'.'+model.id])
         self.assertEqual(updated_model.updated_at, model.updated_at)
 
+    def test_del(self):
+        model = BaseModel()
+        model.save()
+        id = model.id
+        self.assertIsNotNone(storage.all()[f"BaseModel.{id}"])
+        model.delete()
+        self.assertFalse(f"BaseModel.{id}" in storage.all())
+
     def test_to_dict_method(self):
         """Test the to_dict method produces the expected dictionary."""
         model = BaseModel()
