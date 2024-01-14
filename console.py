@@ -29,6 +29,8 @@ class HBNBCommand(cmd.Cmd):
         r"([\w-]*?).update\( *\"([\w-]*?)\" *, *\"([\w-]*?)\" *, *\"(.*?)\" *\)$")
     __update_obj_re = compile(
         r"([\w-]*?).update\( *\"([\w-]*?)\" *, *({.*?}) *\)$")
+    __classes = {'BaseModel': BaseModel, 'User': User, 'State': State, 'Place': Place,
+                 'City': City, 'Amenity': Amenity, 'Review': Review}
 
     @staticmethod
     def cmd_options(line: str, num: int):
@@ -38,14 +40,10 @@ class HBNBCommand(cmd.Cmd):
             options) else None for i in range(num)]
         return options
 
-    @staticmethod
-    def check_cls(cls: str):
+    # @staticmethod
+    def check_cls(self, cls: str):
         """Check Class"""
-        try:
-            globals()[cls]
-            return True
-        except KeyError:
-            return False
+        return cls in self.__classes
 
     @staticmethod
     def check_id(cls: str, id: str):
@@ -84,7 +82,7 @@ class HBNBCommand(cmd.Cmd):
                 {"val": value, "msg": "** value missing **"}]
         if self.check(class_name, 2, id) and self.check_args(*args):
             obj = storage.all()[f"{class_name}.{id}"]
-            instance = globals()[class_name](**obj)
+            instance = self.__classes[class_name](**obj)
             setattr(instance, attr, type(
                 getattr(instance, attr))(value.strip('"')))
             instance.save()
@@ -93,7 +91,7 @@ class HBNBCommand(cmd.Cmd):
         args = [{"val": dic, "msg": "** update obj missing **"}]
         if self.check(class_name, 2, id) and self.check_args(*args):
             obj = storage.all()[f"{class_name}.{id}"]
-            instance = globals()[class_name](**obj)
+            instance = self.__classes[class_name](**obj)
             dic = literal_eval(dic)
             for key in dic:
                 setattr(instance, key, type(getattr(instance, key))(dic[key]))
@@ -123,13 +121,13 @@ class HBNBCommand(cmd.Cmd):
         """Show the Details of an Object"""
         if self.check(class_name, 1, id):
             obj = storage.all()[f"{class_name}.{id}"]
-            instance = globals()[class_name](**obj)
+            instance = self.__classes[class_name](**obj)
             print(instance)
 
     def create(self, class_name):
         """Create New Object from Class Name"""
         if self.check(class_name):
-            instance = globals()[class_name]()
+            instance = self.__classes[class_name]()
             instance.save()
             print(instance.id)
 
