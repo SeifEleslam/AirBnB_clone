@@ -34,12 +34,26 @@ class HBNBCommand(cmd.Cmd):
                  'City': City, 'Amenity': Amenity, 'Review': Review}
 
     @staticmethod
-    def cmd_options(line: str, num: int):
+    def handle_quote(*args):
+        dquote_re = compile(r"^\"(.*?)\"$")
+        squote_re = compile(r"^'(.*?)'$")
+        result = []
+        for arg in args:
+            if search(dquote_re, arg):
+                result.append(dquote_re.findall(arg)[0])
+            elif search(squote_re, arg):
+                result.append(squote_re.findall(arg)[0])
+            else:
+                result.append(arg)
+        return result
+
+    # @staticmethod
+    def cmd_options(self, line: str, num: int):
         """Return the options for a command line."""
         options = [item for item in line.split(" ") if item]
         options = [options[i] if i < len(
             options) else None for i in range(num)]
-        return options
+        return self.handle_quote(*options)
 
     @staticmethod
     def check_id(cls: str, id: str):
@@ -63,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
         """Command Check Handler"""
         if not cls:
             print("** class name missing **")
-        elif not cls in self.__classes:
+        elif cls not in self.__classes:
             print("** class doesn't exist **")
         elif lvl > 0 and not id:
             print("** instance id missing **")
@@ -171,9 +185,10 @@ class HBNBCommand(cmd.Cmd):
         elif (search(self.__destroy_re, line)):
             self.destroy(*self.__destroy_re.findall(line)[0])
         elif (search(self.__update_re, line)):
-            self.update(*self.__update_re.findall(line)[0])
+            self.update(*self.handle_quote(*self.__update_re.findall(line)[0]))
         elif (search(self.__update_obj_re, line)):
-            self.update_obj(*self.__update_obj_re.findall(line)[0])
+            self.update_obj(
+                *self.handle_quote(*self.__update_obj_re.findall(line)[0]))
         else:
             self.stdout.write('*** Unknown syntax: %s\n' % line)
 
