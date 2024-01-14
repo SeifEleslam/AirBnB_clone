@@ -2,7 +2,7 @@
 """Console Interpreter"""
 
 import cmd
-from re import Pattern, compile, search
+from re import compile, search
 from ast import literal_eval
 
 from models.base_model import BaseModel
@@ -85,7 +85,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             return True
 
-    def custom_cmd_options(self, regex: Pattern[str], line):
+    def custom_cmd_options(self, regex, line):
         options = regex.findall(line)
         return self.handle_quote(*(
             options if type(options[0]) == str else options[0]))
