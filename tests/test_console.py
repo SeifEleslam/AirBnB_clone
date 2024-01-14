@@ -19,6 +19,7 @@ class TestConsole(unittest.TestCase):
     """TestConsole"""
 
     def test_control_cmds(self):
+        """test control commands"""
         output = "Quit command to exit the program"
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("help quit"))
@@ -54,6 +55,7 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(f.getvalue().strip(), "")
 
     def test_create_cmd(self):
+        """test create command"""
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
             model = storage.all()["BaseModel."+f.getvalue().strip()]
@@ -86,6 +88,7 @@ class TestConsole(unittest.TestCase):
             self.assertIsInstance(model, Amenity)
 
     def test_all_cmd(self):
+        """test all command"""
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("all"))
             result = "["+", ".join([str(val)
@@ -96,3 +99,27 @@ class TestConsole(unittest.TestCase):
             result = "["+", ".join(
                 [str(val)for _, val in storage.all_cls("User").items()])+"]"
             self.assertEqual(f.getvalue().strip(), result)
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("User.all()"))
+            result = "["+", ".join(
+                [str(val)for _, val in storage.all_cls("User").items()])+"]"
+            self.assertEqual(f.getvalue().strip(), result)
+
+    def test_show_cmd(self):
+        """test show command"""
+        user = User()
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("show User "+user.id))
+            result = str(user)
+            self.assertEqual(f.getvalue().strip(), result)
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(f"User.show({user.id})"))
+            result = str(user)
+            self.assertEqual(f.getvalue().strip(), result)
+
+    def test_count_cmd(self):
+        """test count command"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(f"User.count()"))
+            self.assertEqual(int(f.getvalue().strip()),
+                             len(storage.all_cls("User")))
