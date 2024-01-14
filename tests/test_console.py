@@ -7,11 +7,7 @@ import unittest
 from unittest.mock import patch
 from console import HBNBCommand
 from models import storage
-from models.amenity import Amenity
 from models.base_model import BaseModel
-from models.city import City
-from models.place import Place
-from models.review import Review
 from models.user import User
 
 
@@ -202,7 +198,49 @@ class TestConsole(unittest.TestCase):
         user = User()
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd(
-                "User.update("+user.id+", age, 89)"))
+                "User.update('"+user.id+"', age, 89)"))
             new_user = storage.all()[f"User.{user.id}"]
             self.assertIsInstance(new_user.age, int)
             self.assertEqual(new_user.age, 89)
+        user = User()
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(
+                "User.update("+user.id+", {'first_name' : 'sa3d'})"))
+            self.assertEqual(
+                storage.all()[f"User.{user.id}"].first_name, 'sa3d')
+        user = User()
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(
+                "User.update('"+user.id+"',{ 'age': 89})"))
+            new_user = storage.all()[f"User.{user.id}"]
+            self.assertIsInstance(new_user.age, int)
+            self.assertEqual(new_user.age, 89)
+        output = "** no instance found **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(
+                "User.update('123', first_name , 89)"))
+            self.assertEqual(f.getvalue().strip(), output)
+        user = User()
+        output = "** class doesn't exist **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(
+                f"Use.update('{user.id}', first_name , 89)"))
+            self.assertEqual(f.getvalue().strip(), output)
+        user = User()
+        output = "** instance id missing **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(
+                f"User.update(, first_name , 89)"))
+            self.assertEqual(f.getvalue().strip(), output)
+        user = User()
+        output = "** attribute name missing **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(
+                f"User.update({user.id},  , 89)"))
+            self.assertEqual(f.getvalue().strip(), output)
+        user = User()
+        output = "** value missing **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(
+                f"User.update({user.id},  sad, )"))
+            self.assertEqual(f.getvalue().strip(), output)
