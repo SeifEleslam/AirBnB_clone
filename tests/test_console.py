@@ -15,6 +15,8 @@ class TestConsole(unittest.TestCase):
     """TestConsole"""
 
     def test_control_cmds(self):
+        cmd = HBNBCommand()
+        self.assertEqual(cmd.prompt, "(hbnb) ")
         """test control commands"""
         output = "Quit command to exit the program"
         with patch('sys.stdout', new=StringIO()) as f:
