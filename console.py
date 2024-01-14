@@ -2,7 +2,7 @@
 """Console Interpreter"""
 
 import cmd
-from re import compile, search
+from re import Pattern, compile, search
 from ast import literal_eval
 
 from models.base_model import BaseModel
@@ -22,13 +22,13 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     __all_re = compile(r"(.*?).all\( *\)$")
-    __count_re = compile(r"([\w-]*?).count\( *\)$")
-    __show_re = compile(r"([\w-]*?).show\( *([\w-]*?) *\)$")
-    __destroy_re = compile(r"([\w-]*?).destroy\( *([\w-]*?) *\)$")
+    __count_re = compile(r"(.*?).count\( *\)$")
+    __show_re = compile(r"(.*?).show\( *(.*?) *\)$")
+    __destroy_re = compile(r"(.*?).destroy\( *(.*?) *\)$")
     __update_re = compile(
-        r"([\w-]*?).update\( *(.*?) *, *(.*?) *, *(.*?) *\)$")
+        r"(.*?).update\( *(.*?) *, *(.*?) *, *(.*?) *\)$")
     __update_obj_re = compile(
-        r"([\w-]*?).update\( *(.*?) *, *({.*?}) *\)$")
+        r"(.*?).update\( *(.*?) *, *({.*?}) *\)$")
     __classes = {'BaseModel': BaseModel, 'User': User,
                  'State': State, 'Place': Place,
                  'City': City, 'Amenity': Amenity, 'Review': Review}
@@ -46,14 +46,6 @@ class HBNBCommand(cmd.Cmd):
             else:
                 result.append(arg)
         return result
-
-    # @staticmethod
-    def cmd_options(self, line: str, num: int):
-        """Return the options for a command line."""
-        options = [item for item in line.split(" ") if item]
-        options = [options[i] if i < len(
-            options) else None for i in range(num)]
-        return self.handle_quote(*options)
 
     @staticmethod
     def check_id(cls: str, id: str):
@@ -73,6 +65,13 @@ class HBNBCommand(cmd.Cmd):
                 return False
         return True
 
+    def cmd_options(self, line: str, num: int):
+        """Return the options for a command line."""
+        options = [item for item in line.split(" ") if item]
+        options = [options[i] if i < len(
+            options) else None for i in range(num)]
+        return self.handle_quote(*options)
+
     def check(self, cls: str, lvl=0, id: str = None):
         """Command Check Handler"""
         if not cls:
@@ -86,6 +85,10 @@ class HBNBCommand(cmd.Cmd):
         else:
             return True
 
+    def custom_cmd_options(self, regex: Pattern[str], line):
+        options = regex.findall(line)
+        return self.handle_quote(*(options if type(options[0]) == str else options[0]))
+
     def update(self, class_name: str, id: str, attr: str, value: str):
         """Update Attribute Value"""
         args = [{"val": attr, "msg": "** attribute name missing **"},
@@ -94,7 +97,7 @@ class HBNBCommand(cmd.Cmd):
             obj = storage.all()[f"{class_name}.{id}"]
             instance = self.__classes[class_name](**obj)
             setattr(instance, attr, type(
-                getattr(instance, attr))(value.strip('"')))
+                getattr(instance, attr))(value))
             instance.save()
 
     def update_obj(self, class_name: str, id: str, dic: str):
@@ -176,19 +179,21 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, line: str):
         """Default handler when no specific handler is found"""
+
         if (search(self.__all_re, line)):
-            self.all(*self.__all_re.findall(line))
+            self.all(*self.custom_cmd_options(self.__all_re, line))
         elif (search(self.__count_re, line)):
-            self.count(*self.__count_re.findall(line))
+            self.count(*self.custom_cmd_options(self.__count_re, line))
+            # self.count(*self.__count_re.findall(line))
         elif (search(self.__show_re, line)):
-            self.show(*self.__show_re.findall(line)[0])
+            self.show(*self.custom_cmd_options(self.__show_re, line))
         elif (search(self.__destroy_re, line)):
-            self.destroy(*self.__destroy_re.findall(line)[0])
+            self.destroy(*self.custom_cmd_options(self.__destroy_re, line))
         elif (search(self.__update_re, line)):
-            self.update(*self.handle_quote(*self.__update_re.findall(line)[0]))
+            self.update(*self.custom_cmd_options(self.__update_re, line))
         elif (search(self.__update_obj_re, line)):
             self.update_obj(
-                *self.handle_quote(*self.__update_obj_re.findall(line)[0]))
+                *self.custom_cmd_options(self.__update_obj_re, line))
         else:
             self.stdout.write('*** Unknown syntax: %s\n' % line)
 
