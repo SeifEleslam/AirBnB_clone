@@ -99,6 +99,7 @@ class TestConsole(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("base.all()"))
             self.assertEqual(f.getvalue().strip(), output)
+        output = "** class name missing **"
 
     def test_show_cmd(self):
         """test show command"""
@@ -130,6 +131,10 @@ class TestConsole(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd(f"User.count()"))
             self.assertEqual(int(f.getvalue().strip()),
                              len(storage.all_cls("User")))
+        output = "** class doesn't exist **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("sad.count()"))
+            self.assertEqual(f.getvalue().strip(), output)
 
     def test_destroy_cmd(self):
         """test destroy command"""
@@ -143,3 +148,35 @@ class TestConsole(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd(f"User.destroy({user.id})"))
             with self.assertRaises(KeyError):
                 storage.all()[f"User.{user.id}"]
+        output = "** class name missing **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(".destroy()"))
+            self.assertEqual(f.getvalue().strip(), output)
+        output = "** class name missing **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("destroy"))
+            self.assertEqual(f.getvalue().strip(), output)
+        output = "** class doesn't exist **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("sad.destroy()"))
+            self.assertEqual(f.getvalue().strip(), output)
+        output = "** class doesn't exist **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("destroy sad"))
+            self.assertEqual(f.getvalue().strip(), output)
+        output = "** instance id missing **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("User.destroy()"))
+            self.assertEqual(f.getvalue().strip(), output)
+        output = "** instance id missing **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("destroy User"))
+            self.assertEqual(f.getvalue().strip(), output)
+        output = "** no instance found **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("destroy User sad"))
+            self.assertEqual(f.getvalue().strip(), output)
+        output = "** no instance found **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("User.destroy(sad)"))
+            self.assertEqual(f.getvalue().strip(), output)
