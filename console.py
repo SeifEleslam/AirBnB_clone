@@ -87,7 +87,8 @@ class HBNBCommand(cmd.Cmd):
 
     def custom_cmd_options(self, regex: Pattern[str], line):
         options = regex.findall(line)
-        return self.handle_quote(*(options if type(options[0]) == str else options[0]))
+        return self.handle_quote(*(
+            options if type(options[0]) == str else options[0]))
 
     def update(self, class_name: str, id: str, attr: str, value: str):
         """Update Attribute Value"""
