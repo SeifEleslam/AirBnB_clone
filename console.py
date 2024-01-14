@@ -34,20 +34,6 @@ class HBNBCommand(cmd.Cmd):
                  'City': City, 'Amenity': Amenity, 'Review': Review}
 
     @staticmethod
-    def handle_quote(*args):
-        dquote_re = compile(r"^\"(.*?)\"$")
-        squote_re = compile(r"^'(.*?)'$")
-        result = []
-        for arg in args:
-            if arg and search(dquote_re, arg):
-                result.append(dquote_re.findall(arg)[0])
-            elif arg and search(squote_re, arg):
-                result.append(squote_re.findall(arg)[0])
-            else:
-                result.append(arg)
-        return result
-
-    @staticmethod
     def check_id(cls: str, id: str):
         """Check ID"""
         try:
@@ -65,12 +51,38 @@ class HBNBCommand(cmd.Cmd):
                 return False
         return True
 
+    @staticmethod
+    def get_val(val):
+        """Get Value from Dict or List"""
+        try:
+            return literal_eval(val)
+        except Exception:
+            return val
+
+    def handle_quote(self, *args):
+        dquote_re = compile(r"^\"(.*?)\"$")
+        squote_re = compile(r"^'(.*?)'$")
+        result = []
+        for arg in args:
+            if arg and search(dquote_re, arg):
+                result.append(dquote_re.findall(arg)[0])
+            elif arg and search(squote_re, arg):
+                result.append(squote_re.findall(arg)[0])
+            else:
+                result.append(self.get_val(arg))
+        return result
+
     def cmd_options(self, line: str, num: int):
         """Return the options for a command line."""
         options = [item for item in line.split(" ") if item]
         options = [options[i] if i < len(
             options) else None for i in range(num)]
         return self.handle_quote(*options)
+
+    def custom_cmd_options(self, regex, line):
+        options = regex.findall(line)
+        return self.handle_quote(*(
+            options if type(options[0]) == str else options[0]))
 
     def check(self, cls: str, lvl=0, id: str = None):
         """Command Check Handler"""
@@ -85,11 +97,6 @@ class HBNBCommand(cmd.Cmd):
         else:
             return True
 
-    def custom_cmd_options(self, regex, line):
-        options = regex.findall(line)
-        return self.handle_quote(*(
-            options if type(options[0]) == str else options[0]))
-
     def update(self, class_name: str, id: str, attr: str, value: str):
         """Update Attribute Value"""
         args = [{"val": attr, "msg": "** attribute name missing **"},
@@ -97,7 +104,7 @@ class HBNBCommand(cmd.Cmd):
         if self.check(class_name, 2, id) and self.check_args(*args):
             obj = storage.all()[f"{class_name}.{id}"]
             instance = self.__classes[class_name](**obj)
-            setattr(instance, attr, type(literal_eval(value))(value))
+            setattr(instance, attr, value)
             instance.save()
 
     def update_obj(self, class_name: str, id: str, dic: str):
@@ -107,7 +114,7 @@ class HBNBCommand(cmd.Cmd):
             instance = self.__classes[class_name](**obj)
             dic = literal_eval(dic)
             for key in dic:
-                setattr(instance, key, type(literal_eval(dic[key]))(dic[key]))
+                setattr(instance, key, (dic[key]))
             instance.save()
 
     def all(self, class_name):
@@ -184,7 +191,6 @@ class HBNBCommand(cmd.Cmd):
             self.all(*self.custom_cmd_options(self.__all_re, line))
         elif (search(self.__count_re, line)):
             self.count(*self.custom_cmd_options(self.__count_re, line))
-            # self.count(*self.__count_re.findall(line))
         elif (search(self.__show_re, line)):
             self.show(*self.custom_cmd_options(self.__show_re, line))
         elif (search(self.__destroy_re, line)):
