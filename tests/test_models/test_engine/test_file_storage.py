@@ -59,3 +59,10 @@ class TestFileStorage(unittest.TestCase):
         with patch("builtins.open"):
             storage.save()
             open.assert_called_once_with("file.json", "w")
+
+    def test_del(self):
+        """Test deleting process"""
+        storage = FileStorage()
+        model = BaseModel()
+        storage.delete(f"BaseMode.{model.id}")
+        self.assertFalse(f"BaseMode.{model.id}" in storage.all())
