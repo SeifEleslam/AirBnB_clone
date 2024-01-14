@@ -120,9 +120,11 @@ class HBNBCommand(cmd.Cmd):
     def all(self, class_name):
         """Return All Instances of a Class"""
         if not class_name:
-            print(storage.all())
+            print("[",
+                  *([(val) for _, val in storage.all().items()]), "]")
         elif self.check(class_name):
-            print(storage.all_cls(class_name))
+            print("[",
+                  *([(val) for _, val in storage.all_cls(class_name).items()]), "]")
 
     def count(self, class_name):
         """Count Number of Instances of a Class"""
