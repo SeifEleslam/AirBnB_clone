@@ -131,6 +131,10 @@ class TestConsole(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd(f"User.count()"))
             self.assertEqual(int(f.getvalue().strip()),
                              len(storage.all_cls("User")))
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(f".count()"))
+            self.assertEqual(int(f.getvalue().strip()),
+                             len(storage.all()))
         output = "** class doesn't exist **"
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("sad.count()"))
@@ -180,3 +184,25 @@ class TestConsole(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("User.destroy(sad)"))
             self.assertEqual(f.getvalue().strip(), output)
+
+    def test_update_cmd(self):
+        """test update command"""
+        user = User()
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(
+                "update User "+user.id+" first_name sa3d"))
+            self.assertEqual(
+                storage.all()[f"User.{user.id}"].first_name, 'sa3d')
+        user = User()
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(
+                "User.update("+user.id+", first_name, 'sa3d')"))
+            self.assertEqual(
+                storage.all()[f"User.{user.id}"].first_name, 'sa3d')
+        user = User()
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(
+                "User.update("+user.id+", age, 89)"))
+            new_user = storage.all()[f"User.{user.id}"]
+            self.assertIsInstance(new_user.age, int)
+            self.assertEqual(new_user.age, 89)

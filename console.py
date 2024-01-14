@@ -103,7 +103,6 @@ class HBNBCommand(cmd.Cmd):
                 {"val": value, "msg": "** value missing **"}]
         if self.check(class_name, 2, id) and self.check_args(*args):
             obj = storage.all()[f"{class_name}.{id}"]
-            # instance = self.__classes[class_name](**obj)
             setattr(obj, attr, value)
             obj.save()
 
@@ -111,8 +110,6 @@ class HBNBCommand(cmd.Cmd):
         args = [{"val": dic, "msg": "** update obj missing **"}]
         if self.check(class_name, 2, id) and self.check_args(*args):
             obj = storage.all()[f"{class_name}.{id}"]
-            # instance = self.__classes[class_name](**obj)
-            # dic = literal_eval(dic)
             for key in dic:
                 setattr(obj, key, (dic[key]))
             obj.save()
@@ -143,7 +140,6 @@ class HBNBCommand(cmd.Cmd):
         """Show the Details of an Object"""
         if self.check(class_name, 1, id):
             obj = storage.all()[f"{class_name}.{id}"]
-            # instance = self.__classes[class_name](**obj)
             print(obj)
 
     def create(self, class_name):

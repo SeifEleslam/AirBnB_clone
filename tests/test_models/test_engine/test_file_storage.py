@@ -38,6 +38,8 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(
             storage.all()[f"BaseModel.{model.id}"].
             to_dict(), model.to_dict())
+        self.assertIsInstance(
+            storage.all()[f"BaseModel.{model.id}"], BaseModel)
 
     def test_new(self):
         """test new value in BaseModel"""
@@ -45,14 +47,15 @@ class TestFileStorage(unittest.TestCase):
         obj = BaseModel()
         test = storage.all().copy()
         test[f'{obj.__class__.__name__}.{obj.id}'] = obj
-        storage.new(obj)
-        self.assertEqual(storage.all(), test)
+        storage.save()
+        storage.reload()
+        self.assertEqual(len(storage.all()), len(test))
+        self.assertEqual((storage.all().keys()), (test.keys()))
 
     def test_save(self):
         """Test Saving process"""
         storage = FileStorage()
-        storage.new(
-            BaseModel())
+        model = BaseModel()
         with patch("builtins.open"):
             storage.save()
             open.assert_called_once_with("file.json", "w")
