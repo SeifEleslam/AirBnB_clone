@@ -103,19 +103,19 @@ class HBNBCommand(cmd.Cmd):
                 {"val": value, "msg": "** value missing **"}]
         if self.check(class_name, 2, id) and self.check_args(*args):
             obj = storage.all()[f"{class_name}.{id}"]
-            instance = self.__classes[class_name](**obj)
-            setattr(instance, attr, value)
-            instance.save()
+            # instance = self.__classes[class_name](**obj)
+            setattr(obj, attr, value)
+            obj.save()
 
     def update_obj(self, class_name: str, id: str, dic):
         args = [{"val": dic, "msg": "** update obj missing **"}]
         if self.check(class_name, 2, id) and self.check_args(*args):
             obj = storage.all()[f"{class_name}.{id}"]
-            instance = self.__classes[class_name](**obj)
+            # instance = self.__classes[class_name](**obj)
             # dic = literal_eval(dic)
             for key in dic:
-                setattr(instance, key, (dic[key]))
-            instance.save()
+                setattr(obj, key, (dic[key]))
+            obj.save()
 
     def all(self, class_name):
         """Return All Instances of a Class"""
@@ -141,8 +141,8 @@ class HBNBCommand(cmd.Cmd):
         """Show the Details of an Object"""
         if self.check(class_name, 1, id):
             obj = storage.all()[f"{class_name}.{id}"]
-            instance = self.__classes[class_name](**obj)
-            print(instance)
+            # instance = self.__classes[class_name](**obj)
+            print(obj)
 
     def create(self, class_name):
         """Create New Object from Class Name"""
