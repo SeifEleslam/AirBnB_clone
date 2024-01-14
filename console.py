@@ -183,7 +183,7 @@ class HBNBCommand(cmd.Cmd):
         self.all(*self.cmd_options(line, 1))
 
     def do_update(self, line: str):
-        """Update an attribute value for an object."""
+        """Update an attribute value for an object"""
         self.update(*self.cmd_options(line, 4))
 
     def default(self, line: str):
