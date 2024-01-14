@@ -4,12 +4,23 @@
 import json
 from os import path
 
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.place import Place
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+
 
 class FileStorage():
     """Storage class for storing data in json file"""
 
     __file_path = "file.json"
     __objects = dict()
+    __classes = {'BaseModel': BaseModel, 'User': User,
+                 'State': State, 'Place': Place,
+                 'City': City, 'Amenity': Amenity, 'Review': Review}
 
     def all(self):
         """Get all stored objects"""

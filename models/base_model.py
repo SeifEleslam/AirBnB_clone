@@ -2,7 +2,7 @@
 """Base Model That represents all other classes"""
 from uuid import uuid4
 from datetime import datetime
-from models import storage
+import models
 
 
 class BaseModel():
@@ -27,7 +27,7 @@ class BaseModel():
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
         self.id = str(uuid4())
-        storage.new(self)
+        models.storage.new(self)
 
     def __str__(self) -> str:
         """Return the string representation of class"""
@@ -36,13 +36,13 @@ class BaseModel():
     def save(self) -> None:
         """Update the updated_at time with the current time"""
         self.updated_at = datetime.now()
-        storage.new(self)
-        storage.save()
+        models.storage.new(self)
+        models.storage.save()
 
     def delete(self):
         """Remove instance from storage"""
-        storage.delete(f"{self.__class__.__name__}.{self.id}")
-        storage.save()
+        models.storage.delete(f"{self.__class__.__name__}.{self.id}")
+        models.storage.save()
 
     def to_dict(self):
         """Convert object values to dictionary"""
