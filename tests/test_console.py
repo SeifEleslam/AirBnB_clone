@@ -7,7 +7,12 @@ import unittest
 from unittest.mock import patch
 from console import HBNBCommand
 from models import storage
+from models.amenity import Amenity
 from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.user import User
 
 
 class TestConsole(unittest.TestCase):
@@ -54,6 +59,31 @@ class TestConsole(unittest.TestCase):
             model = storage.all()["BaseModel."+f.getvalue().strip()]
             self.assertIsNotNone(model)
             self.assertIsInstance(model, BaseModel)
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("create User"))
+            model = storage.all()["User."+f.getvalue().strip()]
+            self.assertIsNotNone(model)
+            self.assertIsInstance(model, User)
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("create City"))
+            model = storage.all()["City."+f.getvalue().strip()]
+            self.assertIsNotNone(model)
+            self.assertIsInstance(model, City)
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("create Place"))
+            model = storage.all()["Place."+f.getvalue().strip()]
+            self.assertIsNotNone(model)
+            self.assertIsInstance(model, Place)
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("create Review"))
+            model = storage.all()["Review."+f.getvalue().strip()]
+            self.assertIsNotNone(model)
+            self.assertIsInstance(model, Review)
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("create Amenity"))
+            model = storage.all()["Amenity."+f.getvalue().strip()]
+            self.assertIsNotNone(model)
+            self.assertIsInstance(model, Amenity)
 
     def test_all_cmd(self):
         with patch('sys.stdout', new=StringIO()) as f:
