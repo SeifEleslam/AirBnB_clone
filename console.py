@@ -107,12 +107,12 @@ class HBNBCommand(cmd.Cmd):
             setattr(instance, attr, value)
             instance.save()
 
-    def update_obj(self, class_name: str, id: str, dic: str):
+    def update_obj(self, class_name: str, id: str, dic):
         args = [{"val": dic, "msg": "** update obj missing **"}]
         if self.check(class_name, 2, id) and self.check_args(*args):
             obj = storage.all()[f"{class_name}.{id}"]
             instance = self.__classes[class_name](**obj)
-            dic = literal_eval(dic)
+            # dic = literal_eval(dic)
             for key in dic:
                 setattr(instance, key, (dic[key]))
             instance.save()
@@ -195,11 +195,12 @@ class HBNBCommand(cmd.Cmd):
             self.show(*self.custom_cmd_options(self.__show_re, line))
         elif (search(self.__destroy_re, line)):
             self.destroy(*self.custom_cmd_options(self.__destroy_re, line))
-        elif (search(self.__update_re, line)):
-            self.update(*self.custom_cmd_options(self.__update_re, line))
         elif (search(self.__update_obj_re, line)):
             self.update_obj(
                 *self.custom_cmd_options(self.__update_obj_re, line))
+        elif (search(self.__update_re, line)):
+            self.update(*self.custom_cmd_options(self.__update_re, line))
+
         else:
             self.stdout.write('*** Unknown syntax: %s\n' % line)
 
