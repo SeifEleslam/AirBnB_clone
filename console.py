@@ -26,10 +26,11 @@ class HBNBCommand(cmd.Cmd):
     __show_re = compile(r"([\w-]*?).show\( *([\w-]*?) *\)$")
     __destroy_re = compile(r"([\w-]*?).destroy\( *([\w-]*?) *\)$")
     __update_re = compile(
-        r"([\w-]*?).update\( *\"([\w-]*?)\" *, *\"([\w-]*?)\" *, *\"(.*?)\" *\)$")
+        r"([\w-]*?).update\( *(.*?) *, *(.*?) *, *(.*?) *\)$")
     __update_obj_re = compile(
-        r"([\w-]*?).update\( *\"([\w-]*?)\" *, *({.*?}) *\)$")
-    __classes = {'BaseModel': BaseModel, 'User': User, 'State': State, 'Place': Place,
+        r"([\w-]*?).update\( *(.*?) *, *({.*?}) *\)$")
+    __classes = {'BaseModel': BaseModel, 'User': User,
+                 'State': State, 'Place': Place,
                  'City': City, 'Amenity': Amenity, 'Review': Review}
 
     @staticmethod
@@ -39,11 +40,6 @@ class HBNBCommand(cmd.Cmd):
         options = [options[i] if i < len(
             options) else None for i in range(num)]
         return options
-
-    # @staticmethod
-    def check_cls(self, cls: str):
-        """Check Class"""
-        return cls in self.__classes
 
     @staticmethod
     def check_id(cls: str, id: str):
@@ -67,7 +63,7 @@ class HBNBCommand(cmd.Cmd):
         """Command Check Handler"""
         if not cls:
             print("** class name missing **")
-        elif not self.check_cls(cls):
+        elif not cls in self.__classes:
             print("** class doesn't exist **")
         elif lvl > 0 and not id:
             print("** instance id missing **")
