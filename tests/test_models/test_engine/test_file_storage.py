@@ -13,29 +13,31 @@ class TestFileStorage(unittest.TestCase):
         storage = FileStorage()
         test = storage.all()
         self.assertEqual(storage.all(), test)
-        # self.assertEqual(storage.__file_path, test_file)
 
     @patch('os.path.exists')
     def test_all_no_file(self, mock_path_exists):
         storage = FileStorage()
+        test = storage.all()
         mock_path_exists.return_value = False
-        self.assertEqual(storage.all(), dict())
-
-    @patch('builtins.open')
-    def test_all_with_file(self, mock_open):
-        storage = FileStorage()
-        test = storage.all().copy()
-        test['key'] = "value"
-        mock_open.return_value.__enter__.\
-            return_value.read.return_value = '{"key": "value"}'
+        model = BaseModel()
+        model.save()
         storage.reload()
-        self.assertEqual(storage.all(), {"key": "value"})
+        self.assertEqual(storage.all(), test)
+
+    def test_all_with_file(self):
+        storage = FileStorage()
+        model = BaseModel()
+        model.save()
+        storage.reload()
+        self.assertEqual(
+            storage.all()[f"BaseModel.{model.id}"].
+            to_dict(), model.to_dict())
 
     def test_new(self):
         storage = FileStorage()
         obj = BaseModel()
         test = storage.all().copy()
-        test[f'{obj.__class__.__name__}.{obj.id}'] = obj.to_dict()
+        test[f'{obj.__class__.__name__}.{obj.id}'] = obj
         storage.new(obj)
         self.assertEqual(storage.all(), test)
 

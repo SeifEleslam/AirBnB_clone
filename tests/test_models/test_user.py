@@ -44,7 +44,7 @@ class TestUser(unittest.TestCase):
         self.assertNotEqual(model.updated_at, original_updated_at)
         self.assertGreater(model.updated_at, original_updated_at)
         updated_model = User(
-            **storage.all()[model.__class__.__name__+'.'+model.id])
+            **storage.all()[model.__class__.__name__+'.'+model.id].to_dict())
         self.assertEqual(updated_model.updated_at, model.updated_at)
 
     def test_to_dict_method(self):

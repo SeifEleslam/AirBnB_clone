@@ -18,7 +18,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsNotNone(model.updated_at)
         self.assertNotEqual(model.created_at, model.updated_at)
         self.assertEqual(
-            storage.all()[f'BaseModel.{model.id}'], model.to_dict())
+            storage.all()[f'BaseModel.{model.id}'], model)
 
     def test_instantiation_with_kwargs(self):
         """Test instantiating with keyword arguments."""
@@ -40,7 +40,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotEqual(model.updated_at, original_updated_at)
         self.assertGreater(model.updated_at, original_updated_at)
         updated_model = BaseModel(
-            **storage.all()[model.__class__.__name__+'.'+model.id])
+            **storage.all()[model.__class__.__name__+'.'+model.id].to_dict())
         self.assertEqual(updated_model.updated_at, model.updated_at)
 
     def test_del(self):
