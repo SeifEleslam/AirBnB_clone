@@ -53,6 +53,10 @@ class TestConsole(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertTrue(HBNBCommand().onecmd('EOF'))
             self.assertEqual(f.getvalue().strip(), "")
+        output = '*** Unknown syntax: sad'
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd('sad'))
+            self.assertEqual(f.getvalue().strip(), output)
 
     def test_create_cmd(self):
         """test create command"""
@@ -61,31 +65,14 @@ class TestConsole(unittest.TestCase):
             model = storage.all()["BaseModel."+f.getvalue().strip()]
             self.assertIsNotNone(model)
             self.assertIsInstance(model, BaseModel)
+        output = "** class doesn't exist **"
         with patch('sys.stdout', new=StringIO()) as f:
-            self.assertFalse(HBNBCommand().onecmd("create User"))
-            model = storage.all()["User."+f.getvalue().strip()]
-            self.assertIsNotNone(model)
-            self.assertIsInstance(model, User)
+            self.assertFalse(HBNBCommand().onecmd("create BaseMode"))
+            self.assertEqual(f.getvalue().strip(), output)
+        output = "** class name missing **"
         with patch('sys.stdout', new=StringIO()) as f:
-            self.assertFalse(HBNBCommand().onecmd("create City"))
-            model = storage.all()["City."+f.getvalue().strip()]
-            self.assertIsNotNone(model)
-            self.assertIsInstance(model, City)
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.assertFalse(HBNBCommand().onecmd("create Place"))
-            model = storage.all()["Place."+f.getvalue().strip()]
-            self.assertIsNotNone(model)
-            self.assertIsInstance(model, Place)
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.assertFalse(HBNBCommand().onecmd("create Review"))
-            model = storage.all()["Review."+f.getvalue().strip()]
-            self.assertIsNotNone(model)
-            self.assertIsInstance(model, Review)
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.assertFalse(HBNBCommand().onecmd("create Amenity"))
-            model = storage.all()["Amenity."+f.getvalue().strip()]
-            self.assertIsNotNone(model)
-            self.assertIsInstance(model, Amenity)
+            self.assertFalse(HBNBCommand().onecmd("create"))
+            self.assertEqual(f.getvalue().strip(), output)
 
     def test_all_cmd(self):
         """test all command"""
@@ -104,6 +91,14 @@ class TestConsole(unittest.TestCase):
             result = "["+", ".join(
                 [str(val)for _, val in storage.all_cls("User").items()])+"]"
             self.assertEqual(f.getvalue().strip(), result)
+        output = "** class doesn't exist **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("all BaseMode"))
+            self.assertEqual(f.getvalue().strip(), output)
+        output = "** class doesn't exist **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("base.all()"))
+            self.assertEqual(f.getvalue().strip(), output)
 
     def test_show_cmd(self):
         """test show command"""
@@ -116,6 +111,18 @@ class TestConsole(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd(f"User.show({user.id})"))
             result = str(user)
             self.assertEqual(f.getvalue().strip(), result)
+        output = "** class doesn't exist **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("show BaseMode"))
+            self.assertEqual(f.getvalue().strip(), output)
+        output = "** instance id missing **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("show BaseModel"))
+            self.assertEqual(f.getvalue().strip(), output)
+        output = "** no instance found **"
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("show BaseModel sad"))
+            self.assertEqual(f.getvalue().strip(), output)
 
     def test_count_cmd(self):
         """test count command"""
@@ -123,3 +130,16 @@ class TestConsole(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd(f"User.count()"))
             self.assertEqual(int(f.getvalue().strip()),
                              len(storage.all_cls("User")))
+
+    def test_destroy_cmd(self):
+        """test destroy command"""
+        user = User()
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("destroy User "+user.id))
+            with self.assertRaises(KeyError):
+                storage.all()[f"User.{user.id}"]
+        user = User()
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd(f"User.destroy({user.id})"))
+            with self.assertRaises(KeyError):
+                storage.all()[f"User.{user.id}"]

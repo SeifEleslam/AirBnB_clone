@@ -31,6 +31,8 @@ class TestFileStorage(unittest.TestCase):
         """Tests that the all method returns a list of objects in the file."""
         storage = FileStorage()
         model = BaseModel()
+        self.assertEqual(
+            storage.all()[f"BaseModel.{model.id}"], model)
         model.save()
         storage.reload()
         self.assertEqual(
