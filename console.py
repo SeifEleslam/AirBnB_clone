@@ -97,8 +97,7 @@ class HBNBCommand(cmd.Cmd):
         if self.check(class_name, 2, id) and self.check_args(*args):
             obj = storage.all()[f"{class_name}.{id}"]
             instance = self.__classes[class_name](**obj)
-            setattr(instance, attr, type(
-                getattr(instance, attr))(value))
+            setattr(instance, attr, type(literal_eval(value))(value))
             instance.save()
 
     def update_obj(self, class_name: str, id: str, dic: str):
@@ -108,7 +107,7 @@ class HBNBCommand(cmd.Cmd):
             instance = self.__classes[class_name](**obj)
             dic = literal_eval(dic)
             for key in dic:
-                setattr(instance, key, type(getattr(instance, key))(dic[key]))
+                setattr(instance, key, type(literal_eval(dic[key]))(dic[key]))
             instance.save()
 
     def all(self, class_name):
