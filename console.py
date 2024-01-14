@@ -39,9 +39,9 @@ class HBNBCommand(cmd.Cmd):
         squote_re = compile(r"^'(.*?)'$")
         result = []
         for arg in args:
-            if search(dquote_re, arg):
+            if arg and search(dquote_re, arg):
                 result.append(dquote_re.findall(arg)[0])
-            elif search(squote_re, arg):
+            elif arg and search(squote_re, arg):
                 result.append(squote_re.findall(arg)[0])
             else:
                 result.append(arg)
