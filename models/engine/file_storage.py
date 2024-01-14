@@ -36,7 +36,7 @@ class FileStorage():
 
     def new(self, obj):
         """Add new obj to storage"""
-        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj.to_dict()
+        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
     def delete(self, key):
         """Delete object by its key (Class.ID)"""
@@ -45,11 +45,17 @@ class FileStorage():
 
     def save(self):
         """Save current state of the object list into a file"""
+        jsonDict = dict()
+        for key, val in self.__objects.items():
+            jsonDict[key] = val.to_dict()
         with open(self.__file_path, "w") as file:
-            json.dump(self.__objects, file)
+            json.dump(jsonDict, file)
 
     def reload(self):
         """Reload the object from the storage"""
         if self.__file_path and path.exists(self.__file_path):
             with open(self.__file_path, 'r') as file:
-                self.__objects = json.load(file)
+                jsonDict = json.load(file)
+                for (key, value) in jsonDict.items():
+                    self.__objects[key] = self.__classes[key.split('.')[
+                        0]](**value)
