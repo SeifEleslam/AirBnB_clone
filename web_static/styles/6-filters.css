@@ -42,6 +42,7 @@
 }
 .popover {
   margin: 0;
+  z-index: 100;
   padding: 20px 0;
   width: 100%;
   list-style: none;
