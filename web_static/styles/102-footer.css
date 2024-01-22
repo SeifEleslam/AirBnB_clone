@@ -1,0 +1,15 @@
+.footer {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  text-align: center;
+  height: 60px;
+  border-top: solid 1px #cccccc;
+  width: 100%;
+}
+.footer_placeholder {
+  height: 30px;
+}
