@@ -22,8 +22,8 @@
 .filters > button:hover {
   opacity: 0.9;
 }
-.locations,
-.amenities {
+.filters .locations,
+.filters .amenities {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -72,8 +72,8 @@
   border-right: #dddddd solid 1px;
 }
 
-.locations:hover,
-.amenities:hover {
+.filters.locations:hover,
+.filters.amenities:hover {
   & > .popover {
     visibility: visible;
     opacity: 1;
