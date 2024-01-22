@@ -5,7 +5,12 @@ header {
   border-bottom: solid 1px #cccccc;
   display: flex;
   align-items: center;
-  & > img {
+  & > .img {
+    background-size: contain;
     margin-left: 20px;
+    background-repeat: no-repeat;
+    background-image: url("../images/logo.png");
+    height: 80%;
+    width: 150px;
   }
 }
